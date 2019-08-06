@@ -1,16 +1,8 @@
 "use strict"
 
-const trade_buy = (balance, price) => {
-  return balance / price
-}
+const Emitter = require("./emitter/emitter")
 
-const trade_sell = (balance, price) => {
-  return balance * price
-}
-
-const arbitrage_symbol = (symbol, quotes) => {
-  return Boolean(quotes.indexOf(symbol.quote) != -1 && quotes.indexOf(symbol.asset) != -1)
-}
+const Channel = "OrderBookUpdate"
 
 class Arbitrage {
   constructor(symbols) {
@@ -19,6 +11,29 @@ class Arbitrage {
     this.quotes = ["BTC", "ETH", "BNB", "USDT"]
     this.combinations = []
     this.fee = 0.0015
+  }
+
+  start() {
+    Emitter.on(Channel, (msg) => {
+      let update = 0
+
+      if (msg.exchange == "binance") {
+        for (let i = 0; i < this.symbols.length; i++) {
+          const symbol = this.symbols[i]
+
+          if (symbol.name == msg.symbol) {
+            symbol.ask = msg.ask.price || 0
+            symbol.bid = msg.bid.price || 0
+
+            update++
+          }
+        }
+      }
+
+      if (update > 0) {
+        this.evaluate_combinations()
+      }
+    })
   }
 
   create_combinations() {
@@ -47,19 +62,41 @@ class Arbitrage {
     for (let i = 0; i < this.combinations.length; i++) {
       const circle = this.combinations[i]
 
+      if (circle.a_symbol.ask == 0 || circle.b_symbol.bid == 0 || circle.c_symbol.ask == 0) {
+        continue
+      }
+
       let entry = 1
 
-      let result_a = trade_buy(entry, circle.a_symbol.price) // Entry / a price
+      let result_a = trade_buy(entry, circle.a_symbol.ask) // Entry / a price
 
-      let result_b = trade_buy(result_a, circle.b_symbol.price) // result a / b price
+      let result_b = trade_buy(result_a, circle.b_symbol.bid) // result a / b price
 
-      let result_c = trade_sell(result_b, circle.c_symbol.price) // result b * price
+      let result_c = trade_sell(result_b, circle.c_symbol.ask) // result b * price
 
       let result = result_c / (1 + this.fee * 3)
 
       circle.result = result
+
+      if (circle.result > 1) {
+        console.log(`${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name} :`, circle.result)
+      }
     }
   }
+}
+
+// Ask
+const trade_buy = (balance, price) => {
+  return balance / price
+}
+
+// Bid
+const trade_sell = (balance, price) => {
+  return balance * price
+}
+
+const arbitrage_symbol = (symbol, quotes) => {
+  return Boolean(quotes.indexOf(symbol.quote) != -1 && quotes.indexOf(symbol.asset) != -1)
 }
 
 module.exports = Arbitrage

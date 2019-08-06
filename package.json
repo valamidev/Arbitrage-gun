@@ -14,5 +14,10 @@
   "devDependencies": {
     "jest": "^24.8.0",
     "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "eventemitter3": "^4.0.0",
+    "ioredis": "^4.14.0"
   }
 }
