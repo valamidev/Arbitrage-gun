@@ -11,7 +11,7 @@ class Arbitrage {
     this.quotes = ["BTC", "ETH", "XRP", "BNB", "USDT"]
     this.combinations = []
     this.signals = []
-    this.fee = 0.001
+    this.fee = 0.00075
     this.min_profit = 1.001
   }
 
@@ -62,17 +62,17 @@ class Arbitrage {
     for (let i = 0; i < this.combinations.length; i++) {
       const circle = this.combinations[i]
 
-      if (circle.a_symbol.ask == 0 || circle.b_symbol.ask == 0 || circle.c_symbol.bid == 0) {
+      if (circle.a_symbol.ask == 0 || circle.b_symbol.ask == 0 || circle.c_symbol.ask == 0 || circle.a_symbol.bid == 0 || circle.b_symbol.bid == 0 || circle.c_symbol.bid == 0) {
         continue
       }
 
       let entry = 1
 
-      let result_a = trade_buy(entry, circle.a_symbol.ask) // Entry / a price
+      let result_a = trade_buy(entry, (circle.a_symbol.ask + circle.a_symbol.bid) / 2) // Entry / a price
 
-      let result_b = trade_buy(result_a, circle.b_symbol.ask) // result a / b price
+      let result_b = trade_buy(result_a, (circle.b_symbol.ask + circle.b_symbol.bid) / 2) // result a / b price
 
-      let result_c = trade_sell(result_b, circle.c_symbol.bid) // result b * price
+      let result_c = trade_sell(result_b, (circle.c_symbol.ask + circle.c_symbol.bid) / 2) // result b * price
 
       let result = result_c / (1 + this.fee * 3)
 
