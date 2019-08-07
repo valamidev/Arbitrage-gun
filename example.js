@@ -177,12 +177,4 @@ Arbitrage.create_combinations()
 
 Arbitrage.start()
 
-console.time("Arbitrage calc loop")
-
-for (let i = 0; i < 100; i++) {
-  Arbitrage.evaluate_combinations()
-}
-
-console.timeEnd("Arbitrage calc loop")
-
 console.log(Arbitrage.combinations)

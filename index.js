@@ -48,7 +48,7 @@ class Arbitrage {
               let c_symbol = this.symbols[k]
 
               if (c_symbol.quote == a_symbol.quote && c_symbol.asset == b_symbol.asset && b_symbol.exchange == c_symbol.exchange) {
-                combinations.push({ id: i, a_symbol, b_symbol, c_symbol })
+                combinations.push({ id: i + j + k, a_symbol, b_symbol, c_symbol })
               }
             }
           }
@@ -62,7 +62,7 @@ class Arbitrage {
     for (let i = 0; i < this.combinations.length; i++) {
       const circle = this.combinations[i]
 
-      if (circle.a_symbol.ask == 0 || circle.b_symbol.bid == 0 || circle.c_symbol.ask == 0) {
+      if (circle.a_symbol.ask == 0 || circle.b_symbol.ask == 0 || circle.c_symbol.bid == 0) {
         continue
       }
 
@@ -70,15 +70,15 @@ class Arbitrage {
 
       let result_a = trade_buy(entry, circle.a_symbol.ask) // Entry / a price
 
-      let result_b = trade_buy(result_a, circle.b_symbol.bid) // result a / b price
+      let result_b = trade_buy(result_a, circle.b_symbol.ask) // result a / b price
 
-      let result_c = trade_sell(result_b, circle.c_symbol.ask) // result b * price
+      let result_c = trade_sell(result_b, circle.c_symbol.bid) // result b * price
 
       let result = result_c / (1 + this.fee * 3)
 
       circle.result = result
 
-      if (circle.result > this.min_profit) {
+      if (circle.result > 1) {
         this.add_signal(circle)
       }
     }
