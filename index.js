@@ -11,6 +11,7 @@ class Arbitrage {
     this.quotes = ["BTC", "ETH", "XRP", "BNB", "USDT"]
     this.combinations = []
     this.fee = 0.001
+    this.min_profit = 1.001
   }
 
   start() {
@@ -46,7 +47,7 @@ class Arbitrage {
               let c_symbol = this.symbols[k]
 
               if (c_symbol.quote == a_symbol.quote && c_symbol.asset == b_symbol.asset && b_symbol.exchange == c_symbol.exchange) {
-                combinations.push({ a_symbol, b_symbol, c_symbol })
+                combinations.push({ id: i, a_symbol, b_symbol, c_symbol })
               }
             }
           }
@@ -76,9 +77,18 @@ class Arbitrage {
 
       circle.result = result
 
-      if (circle.result > 1) {
-        console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name} :`, circle.result)
+      if (circle.result > this.min_profit) {
+        this.add_signal(circle)
       }
+    }
+  }
+
+  add_signal(circle) {
+    if (this.signals.indexOf(circle.id) == -1) {
+      this.signals.push(circle.id)
+      Emitter.emit("New arbitrage signal", circle)
+      console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name} :`, circle.result, Date.now())
+      console.log(`${circle.a_symbol.ask}: ${circle.b_symbol.bid}-${circle.c_symbol.ask}`)
     }
   }
 }
@@ -98,3 +108,63 @@ const arbitrage_symbol = (symbol, quotes) => {
 }
 
 module.exports = Arbitrage
+
+/*
+create_combinations4step() {
+    let combinations4 = []
+    for (let i = 0; i < this.symbols.length; i++) {
+      let a_symbol = this.symbols[i]
+      if (arbitrage_symbol(a_symbol, this.quotes)) {
+        for (let j = 0; j < this.symbols.length; j++) {
+          let b_symbol = this.symbols[j]
+
+          if (b_symbol.quote == a_symbol.asset && b_symbol.exchange == a_symbol.exchange) {
+            for (let l = 0; l < this.symbols.length; l++) {
+              const c_symbol = this.symbols[l]
+
+              if (c_symbol.asset == b_symbol.asset && c_symbol.quote != b_symbol.quote && b_symbol.exchange == c_symbol.exchange) {
+                for (let k = 0; k < this.symbols.length; k++) {
+                  let d_symbol = this.symbols[k]
+
+                  if (d_symbol.quote == a_symbol.quote && d_symbol.asset == c_symbol.quote && d_symbol.exchange == c_symbol.exchange) {
+                    combinations4.push({ id: i, a_symbol, b_symbol, c_symbol, d_symbol })
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    this.combinations4 = combinations4
+  }
+
+  evaluate_combinations4step() {
+    for (let i = 0; i < this.combinations4.length; i++) {
+      const circle = this.combinations4[i]
+
+      if (circle.a_symbol.ask == 0 || circle.b_symbol.ask == 0 || circle.c_symbol.bid == 0 || circle.d_symbol.bid == 0) {
+        continue
+      }
+
+      let entry = 1
+
+      let result_a = trade_buy(entry, circle.a_symbol.ask) // BNBBTC
+
+      let result_b = trade_buy(result_a, circle.b_symbol.ask) // ADABNB
+
+      let result_c = trade_sell(result_b, circle.c_symbol.bid) // ADAETH
+
+      let result_d = trade_sell(result_c, circle.d_symbol.bid) // ETHBTC
+
+      let result = result_d / (1 + this.fee * 4)
+
+      circle.result = result
+
+      if (circle.result > 1) {
+        console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name}-${circle.d_symbol.name} :`, circle.result, Date.now())
+        // this.add_signal(circle)
+      }
+    }
+  }
+  */
