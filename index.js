@@ -8,25 +8,23 @@ class Arbitrage {
   constructor(symbols) {
     // Name, Price, Quote, Asset
     this.symbols = symbols
-    this.quotes = ["BTC", "ETH", "BNB", "USDT"]
+    this.quotes = ["BTC", "ETH", "XRP", "BNB", "USDT"]
     this.combinations = []
-    this.fee = 0.0015
+    this.fee = 0.001
   }
 
   start() {
     Emitter.on(Channel, (msg) => {
       let update = 0
 
-      if (msg.exchange == "binance") {
-        for (let i = 0; i < this.symbols.length; i++) {
-          const symbol = this.symbols[i]
+      for (let i = 0; i < this.symbols.length; i++) {
+        const symbol = this.symbols[i]
 
-          if (symbol.name == msg.symbol) {
-            symbol.ask = msg.ask.price || 0
-            symbol.bid = msg.bid.price || 0
+        if (symbol.name == msg.symbol && symbol.exchange == msg.exchange) {
+          symbol.ask = msg.ask.price || 0
+          symbol.bid = msg.bid.price || 0
 
-            update++
-          }
+          update++
         }
       }
 
@@ -43,11 +41,11 @@ class Arbitrage {
       if (arbitrage_symbol(a_symbol, this.quotes)) {
         for (let j = 0; j < this.symbols.length; j++) {
           let b_symbol = this.symbols[j]
-          if (b_symbol.quote == a_symbol.asset) {
+          if (b_symbol.quote == a_symbol.asset && b_symbol.exchange == a_symbol.exchange) {
             for (let k = 0; k < this.symbols.length; k++) {
               let c_symbol = this.symbols[k]
 
-              if (c_symbol.quote == a_symbol.quote && c_symbol.asset == b_symbol.asset) {
+              if (c_symbol.quote == a_symbol.quote && c_symbol.asset == b_symbol.asset && b_symbol.exchange == c_symbol.exchange) {
                 combinations.push({ a_symbol, b_symbol, c_symbol })
               }
             }
@@ -79,7 +77,7 @@ class Arbitrage {
       circle.result = result
 
       if (circle.result > 1) {
-        console.log(`${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name} :`, circle.result)
+        console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name} :`, circle.result)
       }
     }
   }
