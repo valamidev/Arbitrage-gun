@@ -173,13 +173,13 @@ let symbols = [
 
 const Arbitrage = new ARBITRAGEAPI(symbols)
 
+Arbitrage.create_combinations()
+
 Arbitrage.start()
 
 console.time("Arbitrage calc loop")
 
 for (let i = 0; i < 100; i++) {
-  Arbitrage.create_combinations()
-
   Arbitrage.evaluate_combinations()
 }
 

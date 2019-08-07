@@ -10,6 +10,7 @@ class Arbitrage {
     this.symbols = symbols
     this.quotes = ["BTC", "ETH", "XRP", "BNB", "USDT"]
     this.combinations = []
+    this.signals = []
     this.fee = 0.001
     this.min_profit = 1.001
   }
