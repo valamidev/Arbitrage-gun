@@ -10,9 +10,10 @@ class Arbitrage {
     this.symbols = symbols
     this.quotes = ["BTC", "ETH", "XRP", "BNB", "USDT"]
     this.combinations = []
-    this.signals = []
+    this.signals = new Map()
     this.fee = 0.00075
     this.min_profit = 1.001
+    this.singal_timeout = 60000 // 1 min
   }
 
   start() {
@@ -37,6 +38,8 @@ class Arbitrage {
   }
 
   create_combinations() {
+    let id = 1
+
     let combinations = []
     for (let i = 0; i < this.symbols.length; i++) {
       let a_symbol = this.symbols[i]
@@ -48,7 +51,8 @@ class Arbitrage {
               let c_symbol = this.symbols[k]
 
               if (c_symbol.quote == a_symbol.quote && c_symbol.asset == b_symbol.asset && b_symbol.exchange == c_symbol.exchange) {
-                combinations.push({ id: i + j + k, a_symbol, b_symbol, c_symbol })
+                combinations.push({ id, a_symbol, b_symbol, c_symbol })
+                id++
               }
             }
           }
@@ -85,10 +89,19 @@ class Arbitrage {
   }
 
   add_signal(circle) {
-    if (this.signals.indexOf(circle.id) == -1) {
-      this.signals.push(circle.id)
-      Emitter.emit("New arbitrage signal", circle)
-      console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name} :`, circle.result, Date.now())
+    let time = Date.now()
+
+    // Slow down signals 1 / per minute (or other value)
+    this.signals.forEach((value, key) => {
+      if (value + this.singal_timeout < time) {
+        this.signals.delete(key)
+      }
+    })
+
+    if (typeof this.signals.get(circle.id) == "undefined") {
+      this.signals.set(circle.id, time)
+      Emitter.emit("NewArbitrageSignal", circle)
+      console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name} :`, circle.result, time)
       console.log(`${circle.a_symbol.ask}: ${circle.b_symbol.bid}-${circle.c_symbol.ask}`)
     }
   }
