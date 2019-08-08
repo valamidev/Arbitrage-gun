@@ -1,10 +1,5 @@
-"use strict"
+const ARBITRAGEAPI = require("./arbitrage")
 
-require("dotenv").config()
-
-const ARBITRAGEAPI = require("./index")
-
-require("./arbitrage")
 require("./redis")
 
 // Name, Price, Quote, Asset
@@ -242,4 +237,4 @@ Arbitrage.start()
 
 console.log(Arbitrage.combinations)
 
-//require("./arbitrage_trader")
+require("./trader")

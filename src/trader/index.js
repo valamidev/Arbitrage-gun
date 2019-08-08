@@ -2,22 +2,17 @@
 
 // High Frequency strategies are connected directly into Eventemmiters and not capables for backtesting (yet)!
 
-const logger = require("../../logger")
-const ccxt_controller = require("../../exchange/ccxt_controller")
+const logger = require("../logger")
+const ccxt_controller = require("../exchange/ccxt_controller")
 
-const { Redis } = require("../../redis/redis")
-const Emitter = require("../../emitter/emitter")
+const Emitter = require("../emitter/emitter")
 
 const Channel = "ArbitrageSignal"
 
-Redis.subscribe(Channel, function(err, count) {
-  logger.info("Redis pub/sub channel subscribed count: ", count)
-})
-
-Redis.on("message", function(channel, message) {
-  if (Channel == channel) {
-    Emitter.emit(Channel, JSON.parse(message))
-  }
+Emitter.on(Channel, (circle) => {
+  setImmediate(() => {
+    console.log(JSON.parse(circle))
+  })
 })
 
 function* create_arbitrage_circle(circle) {

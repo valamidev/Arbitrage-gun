@@ -4,7 +4,7 @@ const logger = require("../logger")
 const _ = require("lodash")
 // CCXT
 const ccxt = require("ccxt")
-const ccxt_config = require("../ccxt_config.json")
+const ccxt_config = require("../../ccxt_config.json")
 
 class ExchangeAPI {
   constructor() {
