@@ -5,4 +5,6 @@
 
 ** TODO: **
 - Remove console.log()
+- Add Logger(Winston)
 - Add Redis channel to TraderCore
+- Add Docker
