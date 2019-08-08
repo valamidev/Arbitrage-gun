@@ -6,12 +6,12 @@ const Channel = "OrderBookUpdate"
 
 class Arbitrage {
   constructor(symbols) {
-    // Name, Price, Quote, Asset
+    // Exhcange, CCXT symbol ,Id, Price, Quote, Asset
     this.symbols = symbols
     this.quotes = ["BTC", "ETH", "XRP", "BNB", "USDT"]
     this.combinations = []
     this.signals = new Map()
-    this.fee = 0.00075
+    this.fee = 0.001
     this.min_profit = 1.001
     this.singal_timeout = 60000 // 1 min
   }
@@ -23,7 +23,7 @@ class Arbitrage {
       for (let i = 0; i < this.symbols.length; i++) {
         const symbol = this.symbols[i]
 
-        if (symbol.name == msg.symbol && symbol.exchange == msg.exchange) {
+        if (symbol.id == msg.symbol && symbol.exchange == msg.exchange) {
           symbol.ask = msg.ask.price || 0
           symbol.bid = msg.bid.price || 0
 
@@ -70,19 +70,41 @@ class Arbitrage {
         continue
       }
 
+      let direction = "forward"
+
+      // BNBUSDT-WINBNB-WINUSDT ->
+
       let entry = 1
 
-      let result_a = trade_buy(entry, (circle.a_symbol.ask + circle.a_symbol.bid) / 2) // Entry / a price
+      let result_1 = trade_buy(entry, (circle.a_symbol.bid + circle.a_symbol.ask) / 2)
 
-      let result_b = trade_buy(result_a, (circle.b_symbol.ask + circle.b_symbol.bid) / 2) // result a / b price
+      let result_2 = trade_buy(result_1, (circle.b_symbol.bid + circle.b_symbol.ask) / 2)
 
-      let result_c = trade_sell(result_b, (circle.c_symbol.ask + circle.c_symbol.bid) / 2) // result b * price
+      let result_3 = trade_sell(result_2, (circle.c_symbol.ask + circle.c_symbol.bid) / 2)
 
-      let result = result_c / (1 + this.fee * 3)
+      let result = result_3 / (1 + this.fee * 3)
+
+      // BNBUSDT-WINBNB-WINUSDT <-
+
+      entry = 1
+
+      result_1 = trade_buy(entry, (circle.c_symbol.ask + circle.c_symbol.bid) / 2)
+
+      result_2 = trade_sell(result_1, (circle.b_symbol.bid + circle.b_symbol.ask) / 2)
+
+      result_3 = trade_sell(result_2, (circle.a_symbol.bid + circle.a_symbol.ask) / 2)
+
+      let result_backward = result_3 / (1 + this.fee * 3)
+
+      if (result_backward > result) {
+        result = result_backward
+        direction = "backward"
+      }
 
       circle.result = result
+      circle.direction = direction
 
-      if (circle.result > 1) {
+      if (circle.result > this.min_profit) {
         this.add_signal(circle)
       }
     }
@@ -100,9 +122,9 @@ class Arbitrage {
 
     if (typeof this.signals.get(circle.id) == "undefined") {
       this.signals.set(circle.id, time)
-      Emitter.emit("NewArbitrageSignal", circle)
-      console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name} :`, circle.result, time)
-      console.log(`${circle.a_symbol.ask}: ${circle.b_symbol.bid}-${circle.c_symbol.ask}`)
+      Emitter.emit("ArbitrageSignal", circle)
+      console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.id}-${circle.b_symbol.id}-${circle.c_symbol.id} :`, circle.result, circle.direction, time)
+      console.log(`${circle.a_symbol.ask}: ${circle.b_symbol.ask}-${circle.c_symbol.bid}`)
     }
   }
 }
@@ -176,7 +198,7 @@ create_combinations4step() {
       circle.result = result
 
       if (circle.result > 1) {
-        console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.name}-${circle.b_symbol.name}-${circle.c_symbol.name}-${circle.d_symbol.name} :`, circle.result, Date.now())
+        console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.id}-${circle.b_symbol.id}-${circle.c_symbol.id}-${circle.d_symbol.id} :`, circle.result, Date.now())
         // this.add_signal(circle)
       }
     }
