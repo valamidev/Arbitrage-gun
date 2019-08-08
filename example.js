@@ -4,6 +4,7 @@ require("dotenv").config()
 
 const ARBITRAGEAPI = require("./index")
 
+require("./arbitrage")
 require("./redis")
 
 // Name, Price, Quote, Asset

@@ -16,8 +16,11 @@
     "nodemon": "^1.19.1"
   },
   "dependencies": {
+    "ccxt": "^1.18.1036",
     "dotenv": "^8.0.0",
     "eventemitter3": "^4.0.0",
-    "ioredis": "^4.14.0"
+    "ioredis": "^4.14.0",
+    "lodash": "^4.17.15",
+    "winston": "^3.2.1"
   }
 }
