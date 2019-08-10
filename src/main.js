@@ -235,6 +235,6 @@ Arbitrage.create_combinations()
 
 Arbitrage.start()
 
-console.log(Arbitrage.combinations)
+//console.log(Arbitrage.combinations)
 
 require("./trader")
