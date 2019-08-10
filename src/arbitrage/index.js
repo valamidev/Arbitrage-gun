@@ -76,11 +76,11 @@ class Arbitrage {
 
       let entry = 1
 
-      let result_1 = trade_buy(entry, (circle.a_symbol.bid + circle.a_symbol.ask) / 2)
+      let result_1 = trade_buy(entry, circle.a_symbol.bid)
 
-      let result_2 = trade_buy(result_1, (circle.b_symbol.bid + circle.b_symbol.ask) / 2)
+      let result_2 = trade_buy(result_1, circle.b_symbol.bid)
 
-      let result_3 = trade_sell(result_2, (circle.c_symbol.ask + circle.c_symbol.bid) / 2)
+      let result_3 = trade_sell(result_2, circle.c_symbol.ask)
 
       let result = result_3 / (1 + this.fee * 3)
 
@@ -88,11 +88,11 @@ class Arbitrage {
 
       entry = 1
 
-      result_1 = trade_buy(entry, (circle.c_symbol.ask + circle.c_symbol.bid) / 2)
+      result_1 = trade_buy(entry, circle.c_symbol.bid)
 
-      result_2 = trade_sell(result_1, (circle.b_symbol.bid + circle.b_symbol.ask) / 2)
+      result_2 = trade_sell(result_1, circle.b_symbol.ask)
 
-      result_3 = trade_sell(result_2, (circle.a_symbol.bid + circle.a_symbol.ask) / 2)
+      result_3 = trade_sell(result_2, circle.a_symbol.ask)
 
       let result_backward = result_3 / (1 + this.fee * 3)
 
@@ -123,8 +123,8 @@ class Arbitrage {
     if (typeof this.signals.get(circle.id) == "undefined") {
       this.signals.set(circle.id, time)
       Emitter.emit("ArbitrageSignal", JSON.stringify(circle))
-      console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.id}-${circle.b_symbol.id}-${circle.c_symbol.id} :`, circle.result, circle.direction, time)
-      console.log(`${circle.a_symbol.ask}: ${circle.b_symbol.ask}-${circle.c_symbol.bid}`)
+      // console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.id}-${circle.b_symbol.id}-${circle.c_symbol.id} :`, circle.result, circle.direction, time)
+      // console.log(`${circle.a_symbol.ask}: ${circle.b_symbol.ask}-${circle.c_symbol.bid}`)
     }
   }
 }
