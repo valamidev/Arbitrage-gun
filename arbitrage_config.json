@@ -1,11 +1,11 @@
 {
   "debug": 1,
   "balances": {
-    "binance": { "BTC": 0.0015, "ETH": 0 },
+    "binance": { "BTC": 0, "ETH": 0.08 },
     "kucoin": { "BTC": 0, "ETH": 0 }
   },
   "quote_limits":{
-    "binance": { "BTC": 0.0015, "ETH": 0 },
+    "binance": { "BTC": 0, "ETH": 0.08 },
     "kucoin": { "BTC": 0, "ETH": 0 }
   },
   "fee": 0.001,
@@ -99,8 +99,6 @@
     { "exchange": "binance", "symbol": "NANO/BNB", "id": "NANOBNB", "asset": "NANO", "quote": "BNB" },
     { "exchange": "binance", "symbol": "NANO/BTC", "id": "NANOBTC", "asset": "NANO", "quote": "BTC" },
     { "exchange": "binance", "symbol": "NANO/ETH", "id": "NANOETH", "asset": "NANO", "quote": "ETH" },
-    { "exchange": "binance", "symbol": "NAV/BTC", "id": "NAVBTC", "asset": "NAV", "quote": "BTC" },
-    { "exchange": "binance", "symbol": "NAV/ETH", "id": "NAVETH", "asset": "NAV", "quote": "ETH" },
     { "exchange": "binance", "symbol": "NEO/BNB", "id": "NEOBNB", "asset": "NEO", "quote": "BNB" },
     { "exchange": "binance", "symbol": "NEO/BTC", "id": "NEOBTC", "asset": "NEO", "quote": "BTC" },
     { "exchange": "binance", "symbol": "NEO/ETH", "id": "NEOETH", "asset": "NEO", "quote": "ETH" },

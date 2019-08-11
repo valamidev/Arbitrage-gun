@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --max-old-space-size=8192 --experimental-worker .",
+    "start": "node .",
     "dev": "node ./node_modules/nodemon/bin/nodemon.js --watch ./ index.js",
     "test": "jest"
   },

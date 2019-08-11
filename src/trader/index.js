@@ -44,9 +44,9 @@ class Trader {
         return
       }
 
-      logger.info(`Start arbitrage Balance: ${balance} , Exchange: ${exchange} Circle: ${ab.id}-${bc.id}-${cd.id} Direction: ${circle.direction} `)
-
       if (circle.direction == "forward") {
+        logger.info(`Start arbitrage Balance: ${balance} , Exchange: ${exchange} Circle: ${ab.id}-${bc.id}-${cd.id} Direction: ${circle.direction} `)
+
         // BNBUSDT-WINBNB-WINUSDT ->
         let quantity_ab = util.buy_quantity_by_symbol(quote_limit, circle.a_symbol.bid)
         let ab_order_config = { exchange, side: "buy", symbol: ab.symbol, quantity: quantity_ab, price: ab.bid }
