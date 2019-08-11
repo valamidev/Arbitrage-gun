@@ -22,6 +22,7 @@ class Order_manager {
       }
 
       response = await this.exchangeAPI.create_limit_sell_order(this.symbol, this.quantity, this.price)
+      logger.info(`Order created  id: ${response.id} symbol: ${this.symbol}`)
       filled = await this.follow_order(response.id, response.symbol)
     }
     if (this.side == "buy") {
@@ -32,10 +33,11 @@ class Order_manager {
       // Calculate from quote_limit
       this.quantity = util.buy_quantity_by_symbol(this.quantity, this.price)
       response = await this.exchangeAPI.create_limit_buy_order(this.symbol, this.quantity, this.price)
+      logger.info(`Order created  id: ${response.id} symbol: ${this.symbol}`)
       filled = await this.follow_order(response.id, response.symbol)
     }
 
-    logger.verbose(`Order done filled: ${filled}`)
+    logger.info(`Order finished id: ${response.id} symbol: ${this.symbol}  filled: ${filled}`)
 
     return filled
   }
