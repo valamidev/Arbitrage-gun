@@ -72,14 +72,15 @@ class Order_manager {
       } else {
         count += 1
 
-        /* TODO ADD COUNT LIMIT!!! */
-
-        setImmediate(async () => {
+        setTimeout(async () => {
           this.check_order(id, symbol, count)
-        })
+        }, 500)
       }
     } catch (e) {
       logger.error("Trader order check error", e)
+      setTimeout(async () => {
+        this.check_order(id, symbol, count)
+      }, 3000)
     }
   }
 }

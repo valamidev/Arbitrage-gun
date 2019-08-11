@@ -1,15 +1,15 @@
 {
   "debug": 1,
   "balances": {
-    "binance": { "BTC": 0, "ETH": 0.08 },
+    "binance": { "BTC": 0.0039, "ETH": 0 },
     "kucoin": { "BTC": 0, "ETH": 0 }
   },
   "quote_limits":{
-    "binance": { "BTC": 0, "ETH": 0.08 },
+    "binance": { "BTC": 0.0015, "ETH": 0 },
     "kucoin": { "BTC": 0, "ETH": 0 }
   },
   "fee": 0.001,
-  "min_signal_profit": 1.002,
+  "min_signal_profit": 1.01,
   "singal_timeout": 60000,
   "quotes" : ["BTC", "ETH", "XRP", "BNB", "USDT"],
   "symbols": [
@@ -25,8 +25,6 @@
     { "exchange": "binance", "symbol": "ALGO/BTC", "id": "ALGOBTC", "asset": "ALGO", "quote": "BTC" },
     { "exchange": "binance", "symbol": "ALGO/USDC", "id": "ALGOUSDC", "asset": "ALGO", "quote": "USDC" },
     { "exchange": "binance", "symbol": "ALGO/USDT", "id": "ALGOUSDT", "asset": "ALGO", "quote": "USDT" },
-    { "exchange": "binance", "symbol": "ANKR/BNB", "id": "ANKRBNB", "asset": "ANKR", "quote": "BNB" },
-    { "exchange": "binance", "symbol": "ANKR/BTC", "id": "ANKRBTC", "asset": "ANKR", "quote": "BTC" },
     { "exchange": "binance", "symbol": "ARK/BTC", "id": "ARKBTC", "asset": "ARK", "quote": "BTC" },
     { "exchange": "binance", "symbol": "ATOM/BNB", "id": "ATOMBNB", "asset": "ATOM", "quote": "BNB" },
     { "exchange": "binance", "symbol": "ATOM/BTC", "id": "ATOMBTC", "asset": "ATOM", "quote": "BTC" },
@@ -127,9 +125,6 @@
     { "exchange": "binance", "symbol": "TRX/XRP", "id": "TRXXRP", "asset": "TRX", "quote": "XRP" },
     { "exchange": "binance", "symbol": "TUSD/USDT", "id": "TUSDUSDT", "asset": "TUSD", "quote": "USDT" },
     { "exchange": "binance", "symbol": "USDC/USDT", "id": "USDCUSDT", "asset": "USDC", "quote": "USDT" },
-    { "exchange": "binance", "symbol": "VET/BTC", "id": "VETBTC", "asset": "VET", "quote": "BTC" },
-    { "exchange": "binance", "symbol": "VET/ETH", "id": "VETETH", "asset": "VET", "quote": "ETH" },
-    { "exchange": "binance", "symbol": "VET/USDT", "id": "VETUSDT", "asset": "VET", "quote": "USDT" },
     { "exchange": "binance", "symbol": "WAVES/BTC", "id": "WAVESBTC", "asset": "WAVES", "quote": "BTC" },
     { "exchange": "binance", "symbol": "WAVES/ETH", "id": "WAVESETH", "asset": "WAVES", "quote": "ETH" },
     { "exchange": "binance", "symbol": "WTC/BTC", "id": "WTCBTC", "asset": "WTC", "quote": "BTC" },
