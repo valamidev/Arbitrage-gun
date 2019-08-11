@@ -1,0 +1,25 @@
+{
+  "debug": 1,
+  "balances": {
+    "binance": { "BTC": 0.01, "ETH": 0 },
+    "kucoin": { "BTC": 0, "ETH": 0 }
+  },
+  "quote_limits":{
+    "binance": { "BTC": 0.01, "ETH": 0 },
+    "kucoin": { "BTC": 0, "ETH": 0 }
+  },
+  "fee": 0.001,
+  "min_signal_profit": 1.01,
+  "singal_timeout": 60000,
+  "quotes" : ["BTC", "ETH", "XRP", "BNB", "USDT"],
+  "symbols": [
+    { "exchange": "binance", "symbol": "ADA/BNB", "id": "ADABNB", "asset": "ADA", "quote": "BNB" },
+    { "exchange": "binance", "symbol": "ADA/BTC", "id": "ADABTC", "asset": "ADA", "quote": "BTC" },
+    { "exchange": "binance", "symbol": "ADA/ETH", "id": "ADAETH", "asset": "ADA", "quote": "ETH" },
+    { "exchange": "binance", "symbol": "ADA/USDC", "id": "ADAUSDC", "asset": "ADA", "quote": "USDC" },
+    { "exchange": "binance", "symbol": "ADA/USDT", "id": "ADAUSDT", "asset": "ADA", "quote": "USDT" },
+    { "exchange": "kucoin", "symbol": "EOS/BTC", "id": "EOS-BTC", "asset": "EOS", "quote": "BTC" },
+    { "exchange": "kucoin", "symbol": "EOS/ETH", "id": "EOS-ETH", "asset": "EOS", "quote": "ETH" },
+    { "exchange": "kucoin", "symbol": "EOS/USDT", "id": "EOS-USDT", "asset": "EOS", "quote": "USDT" }
+  ]
+}
