@@ -4,8 +4,6 @@ const logger = require("../logger")
 const Emitter = require("../emitter/emitter")
 const ccxt_controller = require("../exchange/ccxt_controller")
 
-const debug = 0
-
 class Order_manager {
   constructor(config) {
     /*config = { exchange, side, symbol, quantity, price }*/
