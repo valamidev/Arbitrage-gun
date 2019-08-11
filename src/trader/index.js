@@ -66,7 +66,7 @@ class Trader {
 
         let amount_cd = await cd_order.execute()
 
-        this.balances[exchange][main_quote] += amount_cd
+        this.balances[exchange][main_quote] += amount_cd * cd.ask // Need to calculate sell value
 
         logger.info(`Arbitrage finished with ${amount_cd}`)
       }
@@ -89,12 +89,14 @@ class Trader {
 
         let amount_bc = await bc_order.execute()
 
+        amount_bc *= bc.ask // Need to calculate sell value
+
         let ab_order_config = { exchange, side: "sell", symbol: ab.symbol, quantity: amount_bc, price: ab.ask }
         let ab_order = new Order(ab_order_config)
 
         let amount_ab = await ab_order.execute()
 
-        this.balances[exchange][main_quote] += amount_ab
+        this.balances[exchange][main_quote] += amount_ab * ab.ask // Need to calculate sell value
 
         logger.info(`Arbitrage finished with ${amount_ab}`)
       }
