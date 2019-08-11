@@ -70,7 +70,7 @@ class Trader {
 
         this.balances[exchange][main_quote] += amount_cd
 
-        logger.verbose(`Arbitrage finished with ${amount_cd}`)
+        logger.info(`Arbitrage finished with ${amount_cd}`)
       }
     } catch (e) {
       logger.error("Arbitrage execute error: ", e)
