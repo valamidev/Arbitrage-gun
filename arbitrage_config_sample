@@ -1,5 +1,4 @@
 {
-  "debug": 1,
   "balances": {
     "binance": { "BTC": 0.01, "ETH": 0 },
     "kucoin": { "BTC": 0, "ETH": 0 }

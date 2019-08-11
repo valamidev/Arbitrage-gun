@@ -48,17 +48,15 @@ class Trader {
         logger.info(`Start arbitrage Balance: ${balance} , Exchange: ${exchange} Circle: ${ab.id}-${bc.id}-${cd.id} Direction: ${circle.direction} `)
 
         // BNBUSDT-WINBNB-WINUSDT ->
-        let quantity_ab = util.buy_quantity_by_symbol(quote_limit, circle.a_symbol.bid)
-        let ab_order_config = { exchange, side: "buy", symbol: ab.symbol, quantity: quantity_ab, price: ab.bid }
+        let ab_order_config = { exchange, side: "buy", symbol: ab.symbol, quantity: quote_limit, price: ab.bid }
         let ab_order = new Order(ab_order_config)
 
-        /* TODO add only remove if the Order were succesfuly created */
+        // Remove from Balance /* TODO add some other logic */
         this.balances[exchange][main_quote] -= quote_limit
 
         let amount_ab = await ab_order.execute()
 
-        let quantity_bc = util.buy_quantity_by_symbol(amount_ab, circle.b_symbol.bid)
-        let bc_order_config = { exchange, side: "buy", symbol: bc.symbol, quantity: quantity_bc, price: bc.bid }
+        let bc_order_config = { exchange, side: "buy", symbol: bc.symbol, quantity: amount_ab, price: bc.bid }
         let bc_order = new Order(bc_order_config)
 
         let amount_bc = await bc_order.execute()
@@ -71,6 +69,34 @@ class Trader {
         this.balances[exchange][main_quote] += amount_cd
 
         logger.info(`Arbitrage finished with ${amount_cd}`)
+      }
+
+      if (circle.direction == "backward") {
+        logger.info(`Start arbitrage Balance: ${balance} , Exchange: ${exchange} Circle: ${ab.id}-${bc.id}-${cd.id} Direction: ${circle.direction} `)
+
+        // BNBUSDT-WINBNB-WINUSDT <-
+
+        let cd_order_config = { exchange, side: "buy", symbol: cd.symbol, quantity: quote_limit, price: cd.bid }
+        let cd_order = new Order(cd_order_config)
+
+        /* TODO add only remove if the Order were succesfuly created */
+        this.balances[exchange][main_quote] -= quote_limit
+
+        let amount_cd = await cd_order.execute()
+
+        let bc_order_config = { exchange, side: "sell", symbol: bc.symbol, quantity: amount_cd, price: bc.ask }
+        let bc_order = new Order(bc_order_config)
+
+        let amount_bc = await bc_order.execute()
+
+        let ab_order_config = { exchange, side: "sell", symbol: ab.symbol, quantity: amount_bc, price: ab.ask }
+        let ab_order = new Order(ab_order_config)
+
+        let amount_ab = await ab_order.execute()
+
+        this.balances[exchange][main_quote] += amount_ab
+
+        logger.info(`Arbitrage finished with ${amount_ab}`)
       }
     } catch (e) {
       logger.error("Arbitrage execute error: ", e)

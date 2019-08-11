@@ -1,7 +1,7 @@
 "use strict"
 
+const logger = require("../logger")
 const Emitter = require("../emitter/emitter")
-
 const Channel = "OrderBookUpdate"
 
 class Arbitrage {
@@ -122,8 +122,7 @@ class Arbitrage {
     if (typeof this.signals.get(circle.id) == "undefined") {
       this.signals.set(circle.id, time)
       Emitter.emit("ArbitrageSignal", JSON.stringify(circle))
-      // console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.id}-${circle.b_symbol.id}-${circle.c_symbol.id} :`, circle.result, circle.direction, time)
-      // console.log(`${circle.a_symbol.ask}: ${circle.b_symbol.ask}-${circle.c_symbol.bid}`)
+      logger.verbose(`${circle.a_symbol.exchange}: ${circle.a_symbol.id}-${circle.b_symbol.id}-${circle.c_symbol.id}   ${circle.result} ${circle.direction} ${time}`)
     }
   }
 }

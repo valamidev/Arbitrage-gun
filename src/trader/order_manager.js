@@ -1,5 +1,6 @@
 "use strict"
 
+const util = require("../utils")
 const logger = require("../logger")
 const Emitter = require("../emitter/emitter")
 const ccxt_controller = require("../exchange/ccxt_controller")
@@ -28,6 +29,8 @@ class Order_manager {
         this.price *= 0.66
       }
 
+      // Calculate from quote_limit
+      this.quantity = util.buy_quantity_by_symbol(this.quantity, this.price)
       response = await this.exchangeAPI.create_limit_buy_order(this.symbol, this.quantity, this.price)
       filled = await this.follow_order(response.id, response.symbol)
     }
