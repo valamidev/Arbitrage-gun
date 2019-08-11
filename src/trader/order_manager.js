@@ -18,7 +18,7 @@ class Order_manager {
     let filled
 
     if (this.side == "sell") {
-      if (debug == 1) {
+      if (process.env.debug == 1) {
         this.price *= 1.5
       }
 
@@ -26,7 +26,7 @@ class Order_manager {
       filled = await this.follow_order(response.id, response.symbol)
     }
     if (this.side == "buy") {
-      if (debug == 1) {
+      if (process.env.debug == 1) {
         this.price *= 0.66
       }
 

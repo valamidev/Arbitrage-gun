@@ -5,18 +5,17 @@ const Emitter = require("../emitter/emitter")
 const Channel = "OrderBookUpdate"
 
 class Arbitrage {
-  constructor(symbols) {
-    // Exhcange, CCXT symbol ,Id, Price, Quote, Asset
-    this.symbols = symbols
-    this.quotes = ["BTC", "ETH", "XRP", "BNB", "USDT"]
+  constructor(config) {
+    /* symbols , quotes,  fee ,  min_signal_profit, singal_timeout*/
+    Object.assign(this, config)
+
     this.combinations = []
     this.signals = new Map()
-    this.fee = 0.001
-    this.min_profit = 1.001
-    this.singal_timeout = 60000 // 1 min
   }
 
   start() {
+    this.create_combinations()
+
     Emitter.on(Channel, (msg) => {
       let update = 0
 
@@ -104,7 +103,7 @@ class Arbitrage {
       circle.result = result
       circle.direction = direction
 
-      if (circle.result > this.min_profit) {
+      if (circle.result > this.min_signal_profit) {
         this.add_signal(circle)
       }
     }
@@ -123,7 +122,7 @@ class Arbitrage {
     if (typeof this.signals.get(circle.id) == "undefined") {
       this.signals.set(circle.id, time)
       Emitter.emit("ArbitrageSignal", JSON.stringify(circle))
-      // console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.id}-${circle.b_symbol.id}-${circle.c_symbol.id} :`, circle.result, circle.direction, time)
+      console.log(`${circle.a_symbol.exchange}: ${circle.a_symbol.id}-${circle.b_symbol.id}-${circle.c_symbol.id} :`, circle.result, circle.direction, time)
       // console.log(`${circle.a_symbol.ask}: ${circle.b_symbol.ask}-${circle.c_symbol.bid}`)
     }
   }
