@@ -4,10 +4,14 @@
 3 (triangle) Way Arbitrage signaler / trader for StockML infrastructure. 
 
 **Supported exchanges:**
+
+```
 - Binance: signaling tested / trading tested
 - Kucoin:  signaling tested / trading untested  
+```
 
 **Disclaimer:**
+
 ```Arbitrage gun made for experiment purpose, do not use it for real-market trading!```
 
 **Usage:**
