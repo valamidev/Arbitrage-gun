@@ -5,7 +5,7 @@ const logger = require("../logger")
 const Emitter = require("../emitter/emitter")
 const ccxt_controller = require("../exchange/ccxt_controller")
 
-const fee_correction = 0.9992
+const fee_correction = 0.9995
 
 class Order_manager {
   constructor(config) {
