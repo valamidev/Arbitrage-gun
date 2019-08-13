@@ -5,6 +5,8 @@ const logger = require("../logger")
 const Emitter = require("../emitter/emitter")
 const ccxt_controller = require("../exchange/ccxt_controller")
 
+const fee_correction = 0.9992
+
 class Order_manager {
   constructor(config) {
     /*config = { exchange, side, symbol, quantity, price }*/
@@ -39,7 +41,7 @@ class Order_manager {
 
     logger.info(`Order finished id: ${response.id} symbol: ${this.symbol}  filled: ${filled}`)
 
-    return filled
+    return filled * fee_correction
   }
 
   async follow_order(id, symbol) {
