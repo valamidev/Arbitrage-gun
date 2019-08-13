@@ -19,6 +19,6 @@
 
 
 **TODO:**
-- Extend Redis capabilities.
+- Extend Redis capabilities
 - Code refactor add better OOP structure
 - Add Docker
